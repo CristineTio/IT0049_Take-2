@@ -8,17 +8,19 @@ class TaskModel extends Model
 {
     protected $table            = 'tasks';
     protected $primaryKey       = 'id';
-    protected $allowedFields    = ['title', 'status', 'task_date', 'created_at'];
+    protected $allowedFields    = ['title', 'status', 'task_date', 'is_archived', 'created_at'];
 
-    // Get today's tasks only
     public function getTodayTasks()
     {
-        return $this->where('task_date', date('Y-m-d'))->findAll();
+        return $this->where('task_date', date('Y-m-d'))
+                    ->where('is_archived', 0)
+                    ->findAll();
     }
 
-    // Get all tasks ordered by date
     public function getAllTasks()
     {
-        return $this->orderBy('task_date', 'ASC')->findAll();
+        return $this->where('is_archived', 0)
+                    ->orderBy('task_date', 'ASC')
+                    ->findAll();
     }
 }
